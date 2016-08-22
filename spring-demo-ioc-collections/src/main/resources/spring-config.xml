@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="complexObject" class="org.spring.demo.ioc.collections.ComplexObject">
+		<!-- 调用setAdminEmails注入 -->
+		<property name="adminEmails">
+			<props>
+				<prop key="adminstrator">administrator@example.org</prop>
+				<prop key="support">support@example.org</prop>
+				<prop key="development">development@example.org</prop>
+			</props>
+		</property>
+
+		<!-- 调用setSomeList注入 -->
+		<property name="someList">
+			<list>
+				<value>a list element followed by a reference</value>
+				<ref bean="aBean" />
+			</list>
+		</property>
+
+
+		<!-- 调用setSomeMap注入 -->
+		<property name="someMap">
+			<map>
+				<entry key="an entry" value="just some thing" />
+				<entry key="a ref" value-ref="aBean" />
+			</map>
+		</property>
+
+
+		<!-- 调用setSomeSet注入 -->
+		<property name="someSet">
+			<set>
+				<value>just some thing</value>
+				<ref bean="aBean" />
+			</set>
+		</property>
+
+	</bean>
+
+	<bean id="aBean" class="org.spring.demo.ioc.collections.ABean"></bean>
+	
+	<!-- 同一个class，不同的bean -->
+	<bean id="child" parent="complexObject">
+		<property name="adminEmails">
+			<!-- merge==true时覆盖父类的属性 ，子类的值覆盖父类的值，也继承父类的值-->
+			<props merge="true">
+				<prop key="adminstrator">administrator@example.org</prop>
+				<prop key="support">support@example.hk</prop>
+			</props>
+		</property>
+		<property name="accounts">
+			<map>
+				<entry key="one" value="9.99"/>
+				<entry key="two" value="2.75"/>
+				<entry key="six" value="0.01"/>
+			</map>
+		</property>
+	</bean>
+</beans>
